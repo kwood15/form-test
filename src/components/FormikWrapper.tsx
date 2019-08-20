@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Formik, Form } from 'formik';
  
-export const FormikWrapper: React.SFC = () => (
+export const FormikWrapper: React.FC = () => (
   <Formik
     initialValues={{ name: '', email: ''}}
     onSubmit={(values, { setSubmitting }) => {
@@ -12,15 +12,17 @@ export const FormikWrapper: React.SFC = () => (
     {props => (
       <Form>
         <label htmlFor="email" aria-label="Email">Email</label>
-        <input 
-          id="email" 
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          value={props.values.email}
-          onChange={props.handleChange}
-          onBlur={props.handleBlur}
-        />
+        <div>
+          <input 
+            id="email" 
+            name="email"
+            type="email"
+            placeholder="Enter your email"
+            value={props.values.email}
+            onChange={props.handleChange}
+            onBlur={props.handleBlur}
+          />
+        </div>
       </Form>
     )}
   </Formik>
