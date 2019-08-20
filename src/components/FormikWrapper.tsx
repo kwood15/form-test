@@ -50,6 +50,9 @@ export const FormikWrapper: React.FC = () => (
           </div>
         </fieldset>
         <fieldset style={styles.fieldset}>
+          <label htmlFor="password" aria-label="Password">
+            Password
+          </label>
           <div>
             <input
               style={styles.input}
