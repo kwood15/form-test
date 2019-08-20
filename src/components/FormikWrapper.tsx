@@ -23,7 +23,7 @@ const validationSchema: Yup.ObjectSchema = Yup.object().shape({
 
 export const FormikWrapper: React.FC = () => (
   <Formik
-    initialValues={{ name: "", email: "", password: "" }}
+    initialValues={{ email: '', password: '' }}
     onSubmit={(values, { setSubmitting }) => {
       console.log("Submitted value", values);
       setTimeout(() => setSubmitting(false), 3000);
