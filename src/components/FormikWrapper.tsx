@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
+import { Formik } from 'formik';
 
 // todo
 const styles = {
@@ -15,25 +15,35 @@ const styles = {
   }
 };
 
+interface FormValues {
+  email: string;
+  password: string;
+}
+
+const initialValues: FormValues = {
+  email: '',
+  password: ''
+};
+
 const validationSchema: Yup.ObjectSchema = Yup.object().shape({
-  name: Yup.string()
+  email: Yup.string()
     .min(1, 'This field must be at least 1 character long')
     .required('This is a required field')
 });
 
-export const FormikWrapper: React.FC = () => (
+export const FormikWrapper: React.FC<{}> = () => (
   <Formik
-    initialValues={{ email: '', password: '' }}
+    initialValues={initialValues}
+    validationSchema={validationSchema}
     onSubmit={(values, { setSubmitting }) => {
-      console.log('Submitted value', values);
       setTimeout(() => {
         alert(JSON.stringify(values, null, 2));
         setSubmitting(false);
-      }, 8000);
+      }, 1000);
     }}
   >
-    {({ handleChange, handleBlur, values }) => (
-      <Form style={styles.form}>
+    {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+      <form style={styles.form} onSubmit={handleSubmit}>
         <fieldset style={styles.fieldset}>
           <label htmlFor="email" aria-label="Email">
             Email
@@ -48,8 +58,9 @@ export const FormikWrapper: React.FC = () => (
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
-              required
+              autoComplete="email"
             />
+            {errors.email}
           </div>
         </fieldset>
         <fieldset style={styles.fieldset}>
@@ -66,13 +77,15 @@ export const FormikWrapper: React.FC = () => (
               value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
+              autoComplete="current-password"
             />
           </div>
+          {errors.password}
         </fieldset>
         <div>
           <button type="submit">Login</button>
         </div>
-      </Form>
+      </form>
     )}
   </Formik>
 );
