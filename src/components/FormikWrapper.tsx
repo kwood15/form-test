@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Yup from 'yup';
-import { Formik } from 'formik';
+import { Formik, Form, Field } from 'formik';
 
 // todo
 const styles = {
@@ -12,6 +12,9 @@ const styles = {
   },
   input: {
     padding: '3px 4px'
+  },
+  error: {
+    color: 'red'
   }
 };
 
@@ -25,42 +28,43 @@ const initialValues: FormValues = {
   password: ''
 };
 
-const validationSchema: Yup.ObjectSchema = Yup.object().shape({
+const validation: Yup.ObjectSchema = Yup.object().shape({
   email: Yup.string()
-    .min(1, 'This field must be at least 1 character long')
-    .required('This is a required field')
+  .email('Invalid email')
+  .required('This is a required field')
 });
 
 export const FormikWrapper: React.FC<{}> = () => (
   <Formik
     initialValues={initialValues}
-    validationSchema={validationSchema}
+    validationSchema={validation}
     onSubmit={(values, { setSubmitting }) => {
+      // todo post
       setTimeout(() => {
         alert(JSON.stringify(values, null, 2));
         setSubmitting(false);
       }, 1000);
     }}
-  >
-    {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-      <form style={styles.form} onSubmit={handleSubmit}>
+    render={({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+      <form onSubmit={handleSubmit}>
         <fieldset style={styles.fieldset}>
           <label htmlFor="email" aria-label="Email">
             Email
           </label>
           <div>
-            <input
+            <Field
               style={styles.input}
               id="email"
               name="email"
               type="email"
               placeholder="Enter your email"
-              value={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              // onChange={handleChange}
+              // onBlur={handleBlur}
               autoComplete="email"
             />
-            {errors.email}
+            {errors.email && touched.email && (
+               <div><span style={styles.error}>{errors.email}</span></div>
+            )}
           </div>
         </fieldset>
         <fieldset style={styles.fieldset}>
@@ -68,24 +72,25 @@ export const FormikWrapper: React.FC<{}> = () => (
             Password
           </label>
           <div>
-            <input
+            <Field
               style={styles.input}
               id="password"
               name="password"
               type="password"
               placeholder="Enter your password"
-              value={values.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              // onChange={handleChange}
+              // onBlur={handleBlur}
               autoComplete="current-password"
             />
+            {errors.password && touched.password && (
+               <div><span style={styles.error}>{errors.password}</span></div>
+            )}
           </div>
-          {errors.password}
         </fieldset>
         <div>
           <button type="submit">Login</button>
         </div>
       </form>
     )}
-  </Formik>
+  />
 );
