@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { Formik, Field } from 'formik';
 
 // todo
-const styles = {
+const styles: any = {
   fieldset: {
     border: 'none'
   },
@@ -12,6 +12,9 @@ const styles = {
   },
   error: {
     color: 'red'
+  },
+  btn: {
+    primary: 'tomato'
   }
 };
 
@@ -50,7 +53,7 @@ export const FormikWrapper: React.FC<{}> = () => (
         setSubmitting(false);
       }, 1000);
     }}
-    render={({ isSubmitting, handleSubmit, handleReset, errors, touched }) => ( // handleChange, handleBlur, values
+    render={({ isSubmitting, handleSubmit, handleReset, errors, touched }) => (
       <form onSubmit={handleSubmit}>
         <fieldset style={styles.fieldset}>
           <label htmlFor="email" aria-label="Email">
@@ -82,13 +85,15 @@ export const FormikWrapper: React.FC<{}> = () => (
               placeholder="Enter your password"
             />
             {errors.password && touched.password && (
-               <div><span style={styles.error}>{errors.password}</span></div>
+              <div>
+                <span style={styles.error}>{errors.password}</span>
+              </div>
             )}
           </div>
         </fieldset>
         <fieldset style={styles.fieldset}>
           <label htmlFor="password" aria-label="Password">
-            Confirm password:
+            Confirm password
           </label>
           <div>
             <Field
@@ -99,15 +104,17 @@ export const FormikWrapper: React.FC<{}> = () => (
               placeholder="Confirm your password"
             />
             {errors.passwordConfirmation && touched.passwordConfirmation && (
-               <div><span style={styles.error}>{errors.passwordConfirmation}</span></div>
+              <div>
+                <span style={styles.error}>{errors.passwordConfirmation}</span>
+              </div>
             )}
           </div>
         </fieldset>
         <div>
-          <button onClick={handleReset}>
+          <button type="reset" onClick={handleReset}>
             Reset
           </button>
-          <button type="submit" >
+          <button style={styles.btn} type="submit" >
             {isSubmitting ? 'Submitting' : 'Register'}
           </button>
         </div>
