@@ -30,7 +30,7 @@ const initialValues: FormValues = {
   passwordConfirmation: ''
 };
 
-const getValidationSchema = (values: FormValues) => {
+function getValidationSchema(values: FormValues) {
   return Yup.object().shape({
     email: Yup.string()
       .required('Email is required')
@@ -40,14 +40,35 @@ const getValidationSchema = (values: FormValues) => {
       .min(6, 'Password has to be longer than 6 characters!'),
      passwordConfirmation: Yup.string()
       .oneOf([values.password], 'Passwords are not the same!')
-      .required('Password confirmation is required!')
+      .required('Password confirmation is required')
   });
+}
+
+function validate(values: FormValues) {
+  const validationSchema = getValidationSchema(values);
+  try {
+    validationSchema.validateSync(values, { abortEarly: false })
+    return {}
+  } catch (error) {
+    return getErrorsFromValidationError(error);
+  }
+}
+
+
+function getErrorsFromValidationError(validationError: any) {
+  const FIRST_ERROR = 0
+  return validationError.inner.reduce((errors: [], error: { path: string, errors: number[]}) => {
+    return {
+      ...errors,
+      [error.path]: error.errors[FIRST_ERROR],
+    }
+  }, {})
 }
 
 export const FormikWrapper: React.FC<{}> = () => (
   <Formik
     initialValues={initialValues}
-    validationSchema={getValidationSchema}
+    validate={validate}
     onSubmit={(values, { setSubmitting }) => {
       // todo post
       setTimeout(() => {
@@ -101,7 +122,7 @@ export const FormikWrapper: React.FC<{}> = () => (
               id="passwordConfirmation"
               name="passwordConfirmation"
               type="password"
-              placeholder="Enter your password"
+              placeholder="Confirm your password"
             />
             {errors.passwordConfirmation && touched.passwordConfirmation && (
                <div><span style={styles.error}>{errors.passwordConfirmation}</span></div>
