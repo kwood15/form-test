@@ -4,9 +4,6 @@ import { Formik, Field } from 'formik';
 
 // todo
 const styles = {
-  form: {
-    padding: '50px'
-  },
   fieldset: {
     border: 'none'
   },
@@ -53,7 +50,7 @@ export const FormikWrapper: React.FC<{}> = () => (
         setSubmitting(false);
       }, 1000);
     }}
-    render={({ isSubmitting, handleSubmit, errors, touched }) => ( // handleChange, handleBlur, values
+    render={({ isSubmitting, handleSubmit, handleReset, errors, touched }) => ( // handleChange, handleBlur, values
       <form onSubmit={handleSubmit}>
         <fieldset style={styles.fieldset}>
           <label htmlFor="email" aria-label="Email">
@@ -107,7 +104,10 @@ export const FormikWrapper: React.FC<{}> = () => (
           </div>
         </fieldset>
         <div>
-          <button type="submit">
+          <button onClick={handleReset}>
+            Reset
+          </button>
+          <button type="submit" >
             {isSubmitting ? 'Submitting' : 'Register'}
           </button>
         </div>
