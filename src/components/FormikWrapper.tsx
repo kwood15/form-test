@@ -30,45 +30,22 @@ const initialValues: FormValues = {
   passwordConfirmation: ''
 };
 
-function getValidationSchema(values: FormValues) {
-  return Yup.object().shape({
-    email: Yup.string()
-      .required('Email is required')
-      .email('Invalid email'),
-    password: Yup.string()
-      .required('Password is required')
-      .min(6, 'Password has to be longer than 6 characters!'),
-     passwordConfirmation: Yup.string()
-      .oneOf([values.password], 'Passwords are not the same!')
-      .required('Password confirmation is required')
-  });
-}
-
-function validate(values: FormValues) {
-  const validationSchema = getValidationSchema(values);
-  try {
-    validationSchema.validateSync(values, { abortEarly: false })
-    return {}
-  } catch (error) {
-    return getErrorsFromValidationError(error);
-  }
-}
-
-
-function getErrorsFromValidationError(validationError: any) {
-  const FIRST_ERROR = 0
-  return validationError.inner.reduce((errors: [], error: { path: string, errors: number[]}) => {
-    return {
-      ...errors,
-      [error.path]: error.errors[FIRST_ERROR],
-    }
-  }, {})
-}
+const validationSchema: Yup.ObjectSchema = Yup.object().shape({
+  email: Yup.string()
+    .required('Email is required')
+    .email('Invalid email'),
+  password: Yup.string()
+    .required('Password is required')
+    .min(6, 'Password has to be longer than 6 characters!'),
+  passwordConfirmation: Yup.string()
+    .oneOf([Yup.ref('password'), ''], 'Passwords are not the same')
+    .required('Confirm password is required')
+});
 
 export const FormikWrapper: React.FC<{}> = () => (
   <Formik
     initialValues={initialValues}
-    validate={validate}
+    validationSchema={validationSchema}
     onSubmit={(values, { setSubmitting }) => {
       // todo post
       setTimeout(() => {
