@@ -108,7 +108,7 @@ export const FormikWrapper: React.FC<{}> = () => (
         </fieldset>
         <div>
           <button type="submit">
-            {isSubmitting ? 'Loading' : 'Register'}
+            {isSubmitting ? 'Submitting' : 'Register'}
           </button>
         </div>
       </form>
