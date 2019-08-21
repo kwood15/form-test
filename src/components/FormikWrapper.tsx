@@ -1,35 +1,38 @@
-import * as React from "react";
-import * as Yup from "yup";
-import { Formik, Form } from "formik";
+import * as React from 'react';
+import * as Yup from 'yup';
+import { Formik, Form } from 'formik';
 
 // todo
 const styles = {
   form: {
-    padding: "50px"
+    padding: '50px'
   },
   fieldset: {
-    border: "none"
+    border: 'none'
   },
   input: {
-    padding: "3px 4px"
+    padding: '3px 4px'
   }
 };
 
 const validationSchema: Yup.ObjectSchema = Yup.object().shape({
   name: Yup.string()
-    .min(1, "This field must be at least 1 character long")
-    .required("This is a required field")
+    .min(1, 'This field must be at least 1 character long')
+    .required('This is a required field')
 });
 
 export const FormikWrapper: React.FC = () => (
   <Formik
     initialValues={{ email: '', password: '' }}
     onSubmit={(values, { setSubmitting }) => {
-      console.log("Submitted value", values);
-      setTimeout(() => setSubmitting(false), 3000);
+      console.log('Submitted value', values);
+      setTimeout(() => {
+        alert(JSON.stringify(values, null, 2));
+        setSubmitting(false);
+      }, 8000);
     }}
   >
-    {props => (
+    {({ handleChange, handleBlur, values }) => (
       <Form style={styles.form}>
         <fieldset style={styles.fieldset}>
           <label htmlFor="email" aria-label="Email">
@@ -42,9 +45,9 @@ export const FormikWrapper: React.FC = () => (
               name="email"
               type="email"
               placeholder="Enter your email"
-              value={props.values.email}
-              onChange={props.handleChange}
-              onBlur={props.handleBlur}
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
               required
             />
           </div>
@@ -60,12 +63,15 @@ export const FormikWrapper: React.FC = () => (
               name="password"
               type="password"
               placeholder="Enter your password"
-              value={props.values.password}
-              onChange={props.handleChange}
-              onBlur={props.handleBlur}
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
           </div>
         </fieldset>
+        <div>
+          <button type="submit">Login</button>
+        </div>
       </Form>
     )}
   </Formik>
