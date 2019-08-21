@@ -13,8 +13,17 @@ const styles: any = {
   error: {
     color: 'red'
   },
-  btn: {
-    primary: 'tomato'
+  button: {
+    border: 'none',
+    padding: '4px 8px',
+    primary: {
+      color: '#ffffff',
+      backgroundColor: '#3c93bc',
+    },
+    secondary: {
+      color: '#404040',
+      backgroundColor: '#e8e8e8'
+    }
   }
 };
 
@@ -23,12 +32,6 @@ interface FormValues {
   password: string;
   passwordConfirmation: string;
 }
-
-const initialValues: FormValues = {
-  email: '',
-  password: '',
-  passwordConfirmation: ''
-};
 
 const validationSchema: Yup.ObjectSchema = Yup.object().shape({
   email: Yup.string()
@@ -41,6 +44,12 @@ const validationSchema: Yup.ObjectSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), ''], 'Passwords are not the same')
     .required('Confirm password is required')
 });
+
+const initialValues: FormValues = {
+  email: '',
+  password: '',
+  passwordConfirmation: ''
+};
 
 export const FormikWrapper: React.FC<{}> = () => (
   <Formik
@@ -111,10 +120,10 @@ export const FormikWrapper: React.FC<{}> = () => (
           </div>
         </fieldset>
         <div>
-          <button type="reset" onClick={handleReset}>
+          <button type="reset" onClick={handleReset} style={{...styles.button, ...styles.button.secondary}}>
             Reset
           </button>
-          <button style={styles.btn} type="submit" >
+          <button type="submit" style={{...styles.button, ...styles.button.primary}}>
             {isSubmitting ? 'Submitting' : 'Register'}
           </button>
         </div>
